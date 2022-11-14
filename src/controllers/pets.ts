@@ -1,51 +1,53 @@
 import { NextFunction, Request, Response } from 'express';
 import { Pets } from '../interface/pets.js';
-import importData from '../db.json' assert { type: 'json' };
+import fs from 'fs/promises';
+//import importData from '../db.json' assert { type: 'json' };
 
-// eslint-disable-next-line prefer-const
-let data: Array<Pets> = importData.pets;
+//let data: Array<Pets> = importData.pets;
+
+const file = './src/db.json';
+const data = await fs.readFile(file);
+let pets: Array<Pets> = JSON.parse(data.toLocaleString());
 
 export class PetsController {
     getAll(req: Request, res: Response) {
-        res.json(data);
+        res.json(pets);
         res.end();
+    }
+
+    get(req: Request, resp: Response) {
+        pets = pets.filter((item) => item.id === +req.params.id);
+        resp.json(pets);
+        resp.end();
     }
 
     post(req: Request, res: Response) {
         const newPet = {
             ...req.body,
-            id: data.length + 1,
+            id: pets.length + 1,
         };
-        data.push(newPet);
+        pets.push(newPet);
         res.json(newPet);
         res.end();
     }
 
     patch(req: Request, res: Response) {
         const updatePet = {
-            ...data.find((item) => item.id === +req.params.id),
+            ...pets.find((item) => item.id === +req.params.id),
             ...req.body,
         };
-        data[data.findIndex((item) => item.id === +req.params.id)] = updatePet;
+        pets[pets.findIndex((item) => item.id === +req.params.id)] = updatePet;
         res.json(updatePet);
         res.end();
     }
 
     delete(req: Request, res: Response, next: NextFunction) {
-        if (!data.find((item) => item.id === +req.params.id)) {
+        if (!pets.find((item) => item.id === +req.params.id)) {
             next(new Error('Not found'));
             return;
         }
-        data = data.filter((item) => item.id !== +req.params.id);
+        pets = pets.filter((item) => item.id !== +req.params.id);
         res.json({});
         res.end();
     }
 }
-
-// import fs from 'fs/promises';
-// (async () => {
-//     const file = '../../dist/db.json';
-//     const data = await fs.readFile(file);
-//     console.log(data.toLocaleString());
-// })();
-// let data: Array<Pets> = fs.
