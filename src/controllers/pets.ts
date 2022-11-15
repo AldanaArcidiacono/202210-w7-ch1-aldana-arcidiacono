@@ -1,53 +1,122 @@
 import { NextFunction, Request, Response } from 'express';
-import { Pets } from '../interface/pets.js';
-import fs from 'fs/promises';
-//import importData from '../db.json' assert { type: 'json' };
-
-//let data: Array<Pets> = importData.pets;
-
-const file = './src/db.json';
-const data = await fs.readFile(file);
-let pets: Array<Pets> = JSON.parse(data.toLocaleString());
+import { Pet } from '../interface/pets.js';
+import { Data } from '../data/data.js';
+import { HTTPError } from '../interface/error.js';
 
 export class PetsController {
-    getAll(req: Request, res: Response) {
-        res.json(pets);
-        res.end();
-    }
+    constructor(public dataModel: Data<Pet>) {}
 
-    get(req: Request, resp: Response) {
-        pets = pets.filter((item) => item.id === +req.params.id);
-        resp.json(pets);
-        resp.end();
-    }
-
-    post(req: Request, res: Response) {
-        const newPet = {
-            ...req.body,
-            id: pets.length + 1,
-        };
-        pets.push(newPet);
-        res.json(newPet);
-        res.end();
-    }
-
-    patch(req: Request, res: Response) {
-        const updatePet = {
-            ...pets.find((item) => item.id === +req.params.id),
-            ...req.body,
-        };
-        pets[pets.findIndex((item) => item.id === +req.params.id)] = updatePet;
-        res.json(updatePet);
-        res.end();
-    }
-
-    delete(req: Request, res: Response, next: NextFunction) {
-        if (!pets.find((item) => item.id === +req.params.id)) {
-            next(new Error('Not found'));
+    async getAll(_req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await this.dataModel.getAll();
+            res.json(data).end();
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
             return;
         }
-        pets = pets.filter((item) => item.id !== +req.params.id);
-        res.json({});
-        res.end();
+    }
+
+    async get(req: Request, resp: Response, next: NextFunction) {
+        try {
+            const data = await this.dataModel.get(+req.params.id);
+            resp.json(data).end();
+        } catch (error) {
+            if ((error as Error).message === 'Not found id') {
+                const httpError = new HTTPError(
+                    404,
+                    'Not Found',
+                    (error as Error).message
+                );
+                next(httpError);
+                return;
+            }
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
+    }
+
+    async post(req: Request, res: Response, next: NextFunction) {
+        if (!req.body.name) {
+            const httpError = new HTTPError(
+                406,
+                'Not Acceptable',
+                'Name must be included in the data'
+            );
+            next(httpError);
+            return;
+        }
+        try {
+            const newPet = await this.dataModel.post(req.body);
+            res.json(newPet).end();
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
+    }
+
+    async patch(req: Request, res: Response, next: NextFunction) {
+        try {
+            const updatePet = await this.dataModel.patch(
+                +req.params.id,
+                req.body
+            );
+            res.json(updatePet).end();
+        } catch (error) {
+            if ((error as Error).message === 'ID Not Found') {
+                const httpError = new HTTPError(
+                    404,
+                    'Not Found',
+                    (error as Error).message
+                );
+                next(httpError);
+                return;
+            }
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
+    }
+
+    async delete(req: Request, res: Response, next: NextFunction) {
+        try {
+            await this.dataModel.delete(+req.params.id);
+            res.json({}).end();
+        } catch (error) {
+            if ((error as Error).message === 'ID Not Found') {
+                const httpError = new HTTPError(
+                    404,
+                    'Not Found',
+                    (error as Error).message
+                );
+                next(httpError);
+                return;
+            }
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
     }
 }

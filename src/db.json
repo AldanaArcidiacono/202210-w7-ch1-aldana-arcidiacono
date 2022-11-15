@@ -1,40 +1,21 @@
 {
     "pets": [
-        {
-            "id": 1,
-            "name": "Pepe",
-            "species": "Lizard",
-            "isCute": true
-        },
-        {
-            "id": 2,
-            "name": "Olimpia",
-            "species": "European Cat",
-            "isCute": true
-        },
-        {
-            "id": 3,
-            "name": "Damon",
-            "species": "Yorkshire",
-            "isCute": true
-        },
-        {
-            "id": 4,
-            "name": "Pumba",
-            "species": "Bulldog",
-            "isCute": true
-        },
-        {
-            "id": 5,
-            "name": "Eneas",
-            "species": "Labrador",
-            "isCute": true
-        },
+        { "id": 1, "name": "Pepe", "species": "Lizard", "isCute": true },
+        { "id": 2, "name": "Olimpia", "species": "Cat", "isCute": true },
+        { "id": 3, "name": "Damon", "species": "Yorkshire", "isCute": true },
+        { "id": 4, "name": "Pumba", "species": "Bulldog", "isCute": true },
+        { "id": 5, "name": "Eneas", "species": "Labrador", "isCute": true },
         {
             "id": 6,
             "name": "Guibrush",
             "species": "Street Cat",
             "isCute": true
+        },
+        {
+            "name": "Sigmund",
+            "species": "European Cat",
+            "isCute": true,
+            "id": 365
         }
     ]
 }

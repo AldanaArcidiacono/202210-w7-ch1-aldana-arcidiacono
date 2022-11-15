@@ -1,9 +1,8 @@
 import http from 'http';
-import { app } from './app.js';
 import * as dotenv from 'dotenv';
-import { CustomError } from './interface/error.js';
-
 dotenv.config();
+import { app } from './app.js';
+import { CustomError } from './interface/error.js';
 
 const port = process.env.PORT || 3900;
 const server = http.createServer(app);
