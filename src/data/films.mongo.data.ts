@@ -13,8 +13,8 @@ const filmSchema = new Schema({
 
 const main = async () => {
     const connector = await mongoose.connect(uri);
-    const Film = model('Film', filmSchema, 'films');
-    await Film.create(
+    const FavFilm = model('FavFilm', filmSchema, 'favFilms');
+    await FavFilm.create(
         {
             title: 'Harry Potter and the Prisoner of Azkaban',
             genre: 'Fantasy and adventure',
@@ -31,7 +31,7 @@ const main = async () => {
             isGood: true,
         }
     );
-    await Film.create({
+    await FavFilm.create({
         title: 'The Notebook',
         genre: 'Romance',
         isGood: false,
@@ -40,3 +40,6 @@ const main = async () => {
     connector.disconnect();
 };
 main();
+
+// No me queda claro si este archivo es necesario o si esto se haría en films.file.data
+// Ademas en mongo se me cargo solo la primer pelicula, trate diferentes formas de subir la informacion sin conseguir que funcionara
