@@ -19,8 +19,8 @@ export class PetFileData implements Data<Pet> {
 
     async get(id: id): Promise<Pet> {
         return fs.readFile(this.dataFileURL, 'utf-8').then((data) => {
-            const aData = JSON.parse(data) as Array<Pet>;
-            const item = aData.find((item) => item.id === id);
+            const aData = JSON.parse(data) as Pets;
+            const item = aData.pets.find((item) => item.id === id);
             if (!item) throw new Error();
             return item;
         });
