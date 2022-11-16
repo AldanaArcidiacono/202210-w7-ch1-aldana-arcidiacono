@@ -50,8 +50,8 @@ export class PetFileData implements Data<Pet> {
         const aData = await this.getAll();
         const index = aData.findIndex((item) => item.id === id);
         if (!index) throw new Error('ID Not Found');
-        aData.filter((item) => item.id !== id);
-        await this.#saveData({ pets: aData });
+        const finalAData = aData.filter((item) => item.id !== id);
+        await this.#saveData({ pets: finalAData });
     }
 
     #createID() {
