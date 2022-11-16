@@ -10,6 +10,11 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
+app.use((_req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 app.get('/', (_req, res) => {
     res.send('API de mascotas. Escribe "/pets" en la URL').end;
 });
