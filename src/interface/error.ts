@@ -13,4 +13,3 @@ export class HTTPError extends Error implements CustomError {
         this.name = 'HTTPError';
     }
 }
-new HTTPError(508, 'Loop Detected', 'We♥Loops');
