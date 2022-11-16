@@ -5,6 +5,7 @@ import { petRouter } from './router/pet.js';
 import { CustomError } from './interface/error.js';
 
 export const app = express();
+app.disable('x-powered-by');
 
 app.use(morgan('dev'));
 app.use(cors());
