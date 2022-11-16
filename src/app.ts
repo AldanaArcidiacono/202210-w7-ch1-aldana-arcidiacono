@@ -7,12 +7,16 @@ import { CustomError } from './interface/error.js';
 export const app = express();
 app.disable('x-powered-by');
 
+const corsOptions = {
+    origin: '*',
+};
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use((_req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+app.use((req, res, next) => {
+    const origin = req.header('Origin');
+    res.setHeader('Access-Control-Allow-Origin', origin as string);
     next();
 });
 
