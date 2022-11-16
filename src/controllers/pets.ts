@@ -21,10 +21,10 @@ export class PetsController {
         }
     }
 
-    async get(req: Request, resp: Response, next: NextFunction) {
+    async get(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.dataModel.get(+req.params.id);
-            resp.json(data).end();
+            res.json(data).end();
         } catch (error) {
             if ((error as Error).message === 'Not found id') {
                 const httpError = new HTTPError(

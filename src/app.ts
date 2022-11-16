@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-    res.send('API de mascotas. Ingresa escribiendo "/pets" en la URL').end;
+    res.send('API de mascotas. Escribe "/pets" en la URL').end;
 });
 
 app.use('/pets', petRouter);
