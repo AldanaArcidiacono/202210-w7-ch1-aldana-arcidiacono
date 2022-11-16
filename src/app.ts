@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { petRouter } from './router/pet.js';
+import { filmsRouter } from './router/film.js';
 import { CustomError } from './interface/error.js';
 
 export const app = express();
@@ -15,16 +16,17 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use((req, res, next) => {
-    const origin = req.header('Origin');
+    const origin = req.header('Origin') || '*';
     res.setHeader('Access-Control-Allow-Origin', origin as string);
     next();
 });
 
 app.get('/', (_req, res) => {
-    res.send('API de mascotas. Escribe "/pets" en la URL').end;
+    res.send('API of pets and films. Write /pets or /films to access').end;
 });
 
 app.use('/pets', petRouter);
+app.use('/films', filmsRouter);
 
 app.use(
     (
