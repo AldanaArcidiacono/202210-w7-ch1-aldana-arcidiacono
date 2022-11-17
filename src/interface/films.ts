@@ -1,5 +1,5 @@
 export type Film = {
-    id: number;
+    id: string;
     title: string;
     genre: string;
     isGood: boolean;
@@ -10,7 +10,7 @@ export type Films = {
 };
 
 export type ProtoFilms = {
-    title: string;
-    genre: string;
-    isGood: boolean;
+    title?: string;
+    genre?: string;
+    isGood?: boolean;
 };
