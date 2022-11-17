@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (_req, res) => {
-    res.send('API of pets and films. Write /pets or /films to access').end;
+    res.send('API of pets and films. Write /pets or /films to access').end();
 });
 
 app.use('/pets', petRouter);
