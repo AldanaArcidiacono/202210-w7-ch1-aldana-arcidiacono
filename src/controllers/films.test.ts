@@ -9,6 +9,9 @@ describe('Given FilmsController', () => {
         FilmsRepository.prototype.getAll = jest
             .fn()
             .mockResolvedValue(['Harry']);
+        FilmsRepository.prototype.get = jest
+            .fn()
+            .mockResolvedValue(['45asd21d']);
         const repository = new FilmsRepository();
         const filmsController = new FilmsController(repository);
         const req: Partial<Request> = {};
@@ -16,9 +19,15 @@ describe('Given FilmsController', () => {
             json: jest.fn(),
         };
         const next: NextFunction = jest.fn();
+
         test('Then if we use getAll(), it should have been called', async () => {
             await filmsController.getAll(req as Request, res as Response, next);
             expect(res.json).toHaveBeenCalledWith({ films: ['Harry'] });
+        });
+
+        test('Then if we use get(), it should have been called', async () => {
+            await filmsController.get(req as Request, res as Response, next);
+            expect(res.json).toHaveBeenCalled();
         });
     });
 });
