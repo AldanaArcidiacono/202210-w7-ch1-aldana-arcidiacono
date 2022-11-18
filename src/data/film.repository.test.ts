@@ -31,9 +31,13 @@ describe('Given the FilmRepository', () => {
             const result = await repository.getAll();
             expect(result[0].title).toEqual(mockFilms[0].title);
         });
-    });
 
-    describe('When we instantiate...', () => {
+        test('Then if the id is wrong delete should throw an error', async () => {
+            expect(async () => {
+                await repository.delete('2a');
+            }).rejects.toThrow(mongoose.Error.CastError);
+        });
+
         test('Then post() should return the mockFilm', async () => {
             const newCoffee = {
                 title: 'Lord of the Rings',
@@ -42,6 +46,7 @@ describe('Given the FilmRepository', () => {
             expect(result.title).toEqual(newCoffee.title);
         });
     });
+
     afterAll(() => {
         mongoose.disconnect();
     });
