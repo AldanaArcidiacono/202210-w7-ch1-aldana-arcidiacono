@@ -25,7 +25,7 @@ jobs:
         run: npm run test:prod
         env:
           USER: ${{ secrets.USER }}
-          PW: ${{ secrets.PW }}
+          PASSWORD: ${{ secrets.PASSWORD }}
           CLUSTER: ${{ secrets.CLUSTER }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
